@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Configuration;
+using System.Diagnostics;
 
 namespace Quiz
 {
@@ -44,7 +45,7 @@ namespace Quiz
 
         private void btn_Exit_Click(object sender, EventArgs e)
         {
-            LoginPage fm = new LoginPage();
+            Home fm = new Home();
             fm.Show();
             this.Dispose();
         }
@@ -72,5 +73,26 @@ namespace Quiz
             }
         }
         #endregion
+
+        private void QuizResult_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                DialogResult result = MessageBox.Show("Do you really want to exit?", "Dialog Title", MessageBoxButtons.YesNo);
+                if (result == DialogResult.Yes)
+                {
+                    Process.GetCurrentProcess().Kill();
+                    Environment.Exit(0);
+                }
+                else
+                {
+                    e.Cancel = true;
+                }
+            }
+            else
+            {
+                e.Cancel = true;
+            }
+        }
     }
 }

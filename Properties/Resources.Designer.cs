@@ -19,7 +19,7 @@ namespace Quiz.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -156,6 +156,16 @@ namespace Quiz.Properties {
         internal static System.Drawing.Bitmap pelicanEEl {
             get {
                 object obj = ResourceManager.GetObject("pelicanEEl", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap r0_0_1920_1080_w1200_h678_fmax {
+            get {
+                object obj = ResourceManager.GetObject("r0_0_1920_1080_w1200_h678_fmax", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

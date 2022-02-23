@@ -11,40 +11,28 @@ using System.Windows.Forms;
 
 namespace Quiz
 {
-    public partial class AdminPanel : Form
+    public partial class Home : Form
     {
-        public AdminPanel()
+        public Home()
         {
             InitializeComponent();
         }
 
-        private void button4_Click(object sender, EventArgs e)
+        private void button1_Click(object sender, EventArgs e)
         {
-            QuestionList ql = new QuestionList();
+            Quizlevel1 ql = new Quizlevel1();
             ql.Show();
             this.Hide();
         }
 
-        private void button5_Click(object sender, EventArgs e)
+        private void button2_Click(object sender, EventArgs e)
         {
             LoginPage lp = new LoginPage();
             lp.Show();
-            this.Dispose();
+            this.Hide();
         }
 
-        private void button2_Click(object sender, EventArgs e)
-        {
-            TypeMaster tm = new TypeMaster();
-            tm.ShowDialog();
-        }
-
-        private void button3_Click(object sender, EventArgs e)
-        {
-            CategoryMaster cm = new CategoryMaster();
-            cm.ShowDialog();
-        }
-
-        private void AdminPanel_FormClosing(object sender, FormClosingEventArgs e)
+        private void Home_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (e.CloseReason == CloseReason.UserClosing)
             {

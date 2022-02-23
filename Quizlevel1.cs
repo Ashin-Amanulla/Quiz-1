@@ -13,6 +13,7 @@ using System.Configuration;
 using System.IO;
 using System.Security.Cryptography;
 using System.Data.SQLite;
+using System.Diagnostics;
 
 namespace Quiz
 {
@@ -181,7 +182,7 @@ namespace Quiz
         }
         private void btn_exit_Click(object sender, EventArgs e)
         {
-            LoginPage fm = new LoginPage();
+            Home fm = new Home();
             fm.Show();
             this.Dispose();
             this.Close();
@@ -268,9 +269,30 @@ namespace Quiz
 
 
         }
+
+
         #endregion
 
-       
-      
+        private void Quizlevel1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                DialogResult result = MessageBox.Show("Do you really want to exit?", "Dialog Title", MessageBoxButtons.YesNo);
+                if (result == DialogResult.Yes)
+                {
+                    Process.GetCurrentProcess().Kill();
+                    Environment.Exit(0);
+                    
+                }
+                else
+                {
+                    e.Cancel = true;
+                }
+            }
+            else
+            {
+                e.Cancel = true;
+            }
+        }
     }
 }

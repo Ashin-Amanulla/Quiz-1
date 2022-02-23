@@ -229,6 +229,7 @@
             this.Name = "QuizResult";
             this.Text = "QuizResult";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.QuizResult_FormClosing);
             this.Load += new System.EventHandler(this.QuizResult_Load);
             this.tlp_main.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgv_result)).EndInit();

@@ -340,6 +340,7 @@ namespace Quiz
             this.Text = "Level 1 Quiz";
             this.TopMost = true;
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Quizlevel1_FormClosing);
             this.Load += new System.EventHandler(this.QuizLevel1_Load);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();

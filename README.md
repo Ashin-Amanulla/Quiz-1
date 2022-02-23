@@ -1,3 +1,3 @@
 # Quiz
 Quiz with admin Panel
-Just a basic ,Windows form application
+Just a basic windows form application

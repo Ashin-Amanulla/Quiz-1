@@ -45,6 +45,9 @@ namespace Quiz
         #endregion
 
         #region Helper Methods
+        /// <summary>
+        /// This method Populated the Grid View with data from Quiz Table
+        /// </summary>
         private void populate()
         {
             dgv_QuestionDisplay.Rows.Clear();
@@ -85,6 +88,11 @@ namespace Quiz
             PrepareRow(dgv_QuestionDisplay.Rows.Count - 1);
 
         }
+        /// <summary>
+        /// This method valid byte array to Image
+        /// </summary>
+        /// <param name="imageBytes">the byte array data for image</param>
+        /// <returns>image if valid byte array else null </returns>
         public Image ByteToImage(byte[] imageBytes)
         {
             if (imageBytes != null && imageBytes.Length > 0)
@@ -97,6 +105,12 @@ namespace Quiz
             else
                 return null;
         }
+        /// <summary>
+        /// This method converts given image to byte array
+        /// </summary>
+        /// <param name="image"> The image to be converted</param>
+        /// <param name="format">the format of the image</param>
+        /// <returns></returns>
         public byte[] ImageToByte(Image image, System.Drawing.Imaging.ImageFormat format)
         {
             if (image != null)
@@ -111,6 +125,11 @@ namespace Quiz
             }
             return null;
         }
+        /// <summary>
+        /// This method provides a openfile window to select Images
+        /// </summary>
+        /// <param name="rowIndex">row index to which the u=image is to be assigned </param>
+        /// <param name="columnIndex">column index to which the u=image is to be assigned</param>
         private void SelectImage(int rowIndex, int columnIndex)
         {
             var dialog = new OpenFileDialog();
@@ -122,6 +141,9 @@ namespace Quiz
 
             }
         }
+        /// <summary>
+        /// This method opens a new form with Image for Preview
+        /// </summary>
         private void PreviewImage()
         {
             try
@@ -148,6 +170,11 @@ namespace Quiz
                 MessageBox.Show(ex.Message, "Could not load image");
             }
         }
+        /// <summary>
+        /// This method opens openfile window if the current
+        /// cell in edit mode and open the image if the current 
+        /// cell is in readonly mode
+        /// </summary>
         private void ProcessImage()
         {
             if (!dgv_QuestionDisplay.CurrentCell.ReadOnly)
@@ -159,6 +186,10 @@ namespace Quiz
                 PreviewImage();
             }
         }
+        /// <summary>
+        /// This method validates the Datagrid view before saving
+        /// </summary>
+        /// <returns>true if valid and false if invalid</returns>
         private bool ValidateGridView()
         {
             foreach (DataGridViewRow row in dgv_QuestionDisplay.Rows)
@@ -209,6 +240,11 @@ namespace Quiz
             }
             return true;
         }
+        /// <summary>
+        /// This method enables and disables edit mode of row 
+        /// </summary>
+        /// <param name="row"> the row of intrest</param>
+        /// <param name="Disable">true to diable and false to inabke</param>
         private void DisableEdit(int row, bool Disable)
         {
             if (!Disable && (row == dgv_QuestionDisplay.Rows.Count - 1))
@@ -222,6 +258,10 @@ namespace Quiz
                 dgv_QuestionDisplay.Rows[row].Cells[i].Style.BackColor = Disable ? Color.White : Color.Tan;
             }
         }
+        /// <summary>
+        /// This method prepares a new row
+        /// </summary>
+        /// <param name="index"> index of row to be prepared</param>
         private void PrepareRow(int index)
         {
             if (dgv_QuestionDisplay.Rows[index].Cells[0].Value == string.Empty || dgv_QuestionDisplay.Rows[index].Cells[0].Value == null)
@@ -230,9 +270,25 @@ namespace Quiz
             dgv_QuestionDisplay.Rows[index].Cells[11].Value = "Delete";
 
         }
+        /// <summary>
+        /// This methods deletes a row form the data grid View
+        /// </summary>
+        /// <param name="index">index of th row to be deleted</param>
         private void DeleteRow(int index)
         {
             dgv_QuestionDisplay.Rows.RemoveAt(index);
+        }
+        /// <summary>
+        /// This method saves the data of the datagridview to the Quiz table
+        /// </summary>
+        private void SaveQuiz()
+        {
+            DataLayer.clearData("Quiz");
+            foreach (DataGridViewRow row in dgv_QuestionDisplay.Rows)
+            {
+                byte[] pic = ImageToByte((Image)row.Cells[4].Value, System.Drawing.Imaging.ImageFormat.Jpeg);
+                DataLayer.InsertData(row, pic);
+            }
         }
 
         #endregion
@@ -242,12 +298,7 @@ namespace Quiz
         {
             if (ValidateGridView())
             {
-                DataLayer.clearData("Quiz");
-                foreach (DataGridViewRow row in dgv_QuestionDisplay.Rows)
-                {
-                    byte[] pic = ImageToByte((Image)row.Cells[4].Value, System.Drawing.Imaging.ImageFormat.Jpeg);
-                    DataLayer.InsertData(row, pic);
-                }
+                SaveQuiz();
                 populate();
                 MessageBox.Show("Sucessfully Saved Data", "Success");
             }

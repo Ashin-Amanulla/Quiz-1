@@ -25,8 +25,17 @@ namespace Quiz
         }
 
         #region Global Variables
+        /// <summary>
+        /// Instance variable <c>x</c> represents the storing question data.
+        /// </summary>
         List<QuestionViewDto> questions = new List<QuestionViewDto>();
+        /// <summary>
+        /// Instance variable <c>x</c>storing the color when radion button is selected.
+        /// </summary>
         Color radioButtonSelected = Color.Coral;
+        /// <summary>
+        /// Instance variable <c>x</c>storing the color when radion button is not selected.
+        /// </summary>
         Color radioButtonNormal = Color.SteelBlue;
         #endregion
 
@@ -39,7 +48,7 @@ namespace Quiz
                 con.Open();
             }
 
-            ReadquestionsfromJson();
+            GetDataFromDatabase();
             PrepareForm();
             populateQuestion(1);
         }
@@ -67,11 +76,11 @@ namespace Quiz
         #endregion
 
         #region Helper Methods
-        private void ReadquestionsfromJson()
+        /// <summary>
+        ///  This method stores data in the questions variable from the database
+        /// </summary>
+        private void GetDataFromDatabase()
         {
-            //var jsonLibrarypath = ConfigurationSettings.AppSettings["JsonLibPath"].ToString();
-            //var jsonFilename = ConfigurationSettings.AppSettings["QuestionJsonName"].ToString();
-           // questions = JsonConvert.DeserializeObject<List<QuestionViewDto>>(File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory+ jsonLibrarypath + jsonFilename));
             DataSet x = DataLayer.DisplayData();
             int i = 1;
             foreach (DataRow row in x.Tables[0].Rows)
@@ -98,6 +107,9 @@ namespace Quiz
             }
 
         }
+        /// <summary>
+        ///  this method hides the radio button 
+        /// </summary>
         private void PrepareChoice()
         {
             rb_choice1.Visible = false;
@@ -105,6 +117,9 @@ namespace Quiz
             rb_choice3.Visible = false;
             rb_choice4.Visible = false;
         }
+        /// <summary>
+        ///  this method hides the finish button and adds tab buttons to the form
+        /// </summary>
         private void PrepareForm()
         {
             btn_Finish.Visible = false;
@@ -114,6 +129,9 @@ namespace Quiz
 
             }
         }
+        /// <summary>
+        ///  this method clears the radio button selection
+        /// </summary>
         private void ResetRadioButton()
         {
             rb_choice1.BackColor = radioButtonNormal;
@@ -126,6 +144,11 @@ namespace Quiz
             rb_choice4.Checked = false;
 
         }
+        /// <summary>
+        ///  this method controls the visiblity of next and previous buttons
+        ///  according tho the question number
+        /// </summary>
+        /// <param name="questionNumber">the current question number.</param>
         private void PrepareTraverseButtons(int questionNumber)
         {
             if (questionNumber == 1)
@@ -142,7 +165,11 @@ namespace Quiz
                 btn_Next.Visible = true;
             }
         }
-        private void AddTabButton(int i)
+        /// <summary>
+        ///  this method adds new tabbutton and its click event
+        /// </summary>
+        /// <param name=""="index">the index of new button.</param>
+        private void AddTabButton(int index)
         {
             Button button = new Button();
             button.Height = 30;
@@ -150,14 +177,18 @@ namespace Quiz
             button.FlatStyle = FlatStyle.Flat;
             button.BackColor = Color.GhostWhite;
             button.ForeColor = Color.Black;
-            button.Text = i.ToString();
-            button.Tag = i.ToString();
-            button.Name = "tabButton" + i.ToString();
+            button.Text = index.ToString();
+            button.Tag = index.ToString();
+            button.Name = "tabButton" + index.ToString();
             button.AccessibleName = i.ToString();
             button.Font = new Font("Georgia", 12);
             tabButtonpanel.Controls.Add(button);
             button.Click += new EventHandler(TabButton_Click);
         }
+        /// <summary>
+        ///  this method checks if the Quiz is finished 
+        ///  and makes Finish button visible if finished
+        ///  </summary>
         private void CheckFinish()
         {
             if (questions.Where(x => x.RadioButtonIndex == 0).Count() == 0)
@@ -165,6 +196,11 @@ namespace Quiz
                 btn_Finish.Visible = true;
             }
         }
+        /// <summary>
+        /// This method valid byte array to Image
+        /// </summary>
+        /// <param name="imageBytes">the byte array data for image</param>
+        /// <returns>image if valid byte array else null </returns>
         public Image ByteToImage(byte[] imageBytes)
         {
             if (imageBytes != null && imageBytes.Length > 0)
@@ -235,6 +271,9 @@ namespace Quiz
         #endregion
 
         #region Main Methods
+        /// <summary>
+        /// This method populates the question and  answers.
+        /// </summary>
         private void populateQuestion(int questionNumber)
         {
             

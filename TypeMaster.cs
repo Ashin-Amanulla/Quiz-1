@@ -15,12 +15,16 @@ namespace Quiz
         #region Form Events
         private void TypeMaster_Load(object sender, EventArgs e)
         {
-            Populate();
+            PopulateGridView();
         }
         #endregion
 
         #region Helper Methods
-        private void Populate()
+
+        /// <summary>
+        /// This method Populated the Grid View with data from TypeMaster Table
+        /// </summary>
+        private void PopulateGridView()
         {
             dgv_typeMaster.Rows.Clear();
             DataSet masterData = DataLayer.GetTypeMaster();
@@ -34,6 +38,13 @@ namespace Quiz
             dgv_typeMaster.Rows.Add();
             PrepareRow(dgv_typeMaster.CurrentRow.Index);
         }
+
+        /// <summary>
+        /// This method Prepopulates Button text in a Row
+        /// </summary>
+        /// <param>
+        /// <c>index</c> The index of the row to be processed
+        /// </param>
         private void PrepareRow(int index)
         {
 
@@ -41,6 +52,16 @@ namespace Quiz
             dgv_typeMaster.Rows[index].Cells[3].Value = "Delete";
 
         }
+
+        /// <summary>
+        /// This method Diables or Enables Editing of a given Row
+        /// </summary>
+        /// <param>
+        /// <c>row</c> is the Index of Perform the Action on.
+        /// </param>
+        ///  /// <param>
+        /// <c>Disable</c> contains value for Disble/Enable.
+        /// </param>
         private void DisableEdit(int row, bool Disable)
         {
             if (!Disable && (row == dgv_typeMaster.Rows.Count - 1))
@@ -52,11 +73,21 @@ namespace Quiz
             dgv_typeMaster.Rows[row].Cells[1].Style.BackColor = Disable ? Color.White : Color.Tan;
 
         }
+        /// <summary>
+        /// This method Deletes a Row from the Data Grid View.
+        /// </summary>
+        /// <param>
+        /// <c>index</c> is index of the row to be deleted.
+        /// </param>
         private void DeleteRow(int index)
         {
             dgv_typeMaster.Rows.RemoveAt(index);
         }
 
+        /// <summary>
+        /// This method Validates the GridView on Sumbit.
+        /// </summary>
+        /// <param>
         private bool validateGridView()
         {
             foreach (DataGridViewRow row in dgv_typeMaster.Rows)
@@ -87,7 +118,7 @@ namespace Quiz
                 {
                     DataLayer.InsertTypeMasterData(row);
                 }
-                Populate();
+                PopulateGridView();
                 MessageBox.Show("Sucessfully Saved Data", "Success");
 
             }

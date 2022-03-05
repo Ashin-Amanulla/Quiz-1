@@ -16,13 +16,16 @@ namespace Quiz
 {
     static class DataLayer
     {
-        static SQLiteConnection  mDBcon = new SQLiteConnection("Data Source = Library\\DB\\memory.db");
+       
+        static SQLiteConnection  mDBcon = new SQLiteConnection("Data Source = Library\\DB\\memory.db"); //connection string
         static SQLiteDataAdapter datadapter;
         static SQLiteCommand cmd;
-        static DataSet dataset = new DataSet();
-        //static IDbTransaction trans;       
+        static DataSet dataset = new DataSet();    
         static Random randmnum = new Random();
-       
+
+        /// <summary>
+        /// This Method Creates the Necessary Tables in the Database if it doesnt Already Exist.
+        /// </summary>
         public static void CreateFile()
         {        
           
@@ -42,6 +45,15 @@ namespace Quiz
              
             }
         }
+        /// <summary>
+        /// This Method Retrives Datafrom the Quiz Table.
+        /// </summary>
+        /// <param>
+        /// <c>admin</c>Determines if the call is from admin listing or Quiz to randomize result.
+        /// </param>
+        /// <returns>
+        /// Dataset containing data from the Quiz table.
+        /// </returns>
         public static DataSet DisplayData(bool admin = false)
         {
             CreateFile();
@@ -55,6 +67,12 @@ namespace Quiz
             return dataset;  
  
         }
+        /// <summary>
+        /// This method retrives data from Typemaster table .
+        /// </summary>
+        /// <returns>
+        /// Dataset containg typemaster data
+        /// </returns>
         public static DataSet GetTypeMaster()
         {
             CreateFile();
@@ -68,6 +86,12 @@ namespace Quiz
             return dataset;
 
         }
+        /// <summary>
+        /// This method retrives data from CategoryMaster table .
+        /// </summary>
+        /// <returns>
+        /// Dataset containg CategoryMaster data
+        /// </returns>
         public static DataSet GetCategoryMaster()
         {
             CreateFile();
@@ -81,6 +105,15 @@ namespace Quiz
             return dataset;
 
         }
+        /// <summary>
+        /// This method retrives stored image from the database.
+        /// </summary>
+        /// <param>
+        /// <c>Id</c>is the question id of the Image.
+        /// </param>
+        /// <returns>
+        ///byte array of the image
+        /// </returns>
         public static byte[] LoadImage(int Id)
         {
             byte[] a = null;
@@ -106,6 +139,12 @@ namespace Quiz
             mDBcon.Close();
             return a;
         }
+        /// <summary>
+        /// This method clears datafrom given table.
+        /// </summary>
+        /// <param>
+        /// <c>tablename</c> is the name of the table.
+        /// </param>
         public static void clearData(string tablename)
         {
             mDBcon.Open();
@@ -118,6 +157,15 @@ namespace Quiz
             mDBcon.Close();
 
         }
+        /// <summary>
+        /// This method inserts data into the Quiz table .
+        /// </summary>
+        /// <param>
+        /// <c>row</c> is the row to be inserted.
+        /// </param>
+        /// <param>
+        /// <c>image</c> is the Image byte to be inserted.
+        /// </param>
         public static void InsertData(DataGridViewRow row , byte[] image)
         {
             try
@@ -168,6 +216,18 @@ namespace Quiz
            
 
         }
+        /// <summary>
+        /// This method validates the user login .
+        /// </summary>
+        /// <param>
+        /// <c>username</c> is the username.
+        /// </param>
+        /// /// <param>
+        /// <c>password</c> is the password.
+        /// </param>
+        /// <returns>
+        /// True if valid False if Invalid.
+        /// </returns>
         public static bool Login(string username ,string password)
         {
             mDBcon.Open();
@@ -179,6 +239,15 @@ namespace Quiz
             mDBcon.Close();
             return dataset.Tables[0].Rows.Count > 0 ?true:false;
         }
+        /// <summary>
+        /// This method converts the given string to MD5 Hash.
+        /// </summary>
+        /// <param>
+        /// <c>input</c>is the sting to be converted.
+        /// </param>
+        /// <returns>
+        /// MD5 of the input string.
+        /// </returns>
         public static string CreateMD5(string input)
         {
             // Use input string to calculate MD5 hash
@@ -196,7 +265,12 @@ namespace Quiz
                 return sb.ToString();
             }
         }
-
+        /// <summary>
+        /// This method inserts data into typeMaster table.
+        /// </summary>
+        /// <param>
+        /// <c>row</c>is the row to be inserted.
+        /// </param>
         public static void  InsertTypeMasterData(DataGridViewRow row)
         {
            
@@ -210,6 +284,12 @@ namespace Quiz
 
             mDBcon.Close();
         }
+        /// <summary>
+        /// This method inserts data into typeMaster table.
+        /// </summary>
+        /// <param>
+        /// <c>row</c>is the row to be inserted.
+        /// </param>
         public static void InsertCategoryMasterData(DataGridViewRow row)
         {
             
@@ -223,7 +303,5 @@ namespace Quiz
 
             mDBcon.Close();
         }
-
-
     }
 }

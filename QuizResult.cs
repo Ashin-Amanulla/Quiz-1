@@ -71,6 +71,9 @@ namespace Quiz
         #endregion
 
         #region Main Methods
+        /// <summary>
+        /// This method populates the gridview with the result data.
+        /// </summary>
         private void PopulateForm()
         {
             var imageLibrarypath = ConfigurationSettings.AppSettings["ImageLibPath"].ToString();

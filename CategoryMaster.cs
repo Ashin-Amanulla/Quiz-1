@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Quiz
@@ -16,6 +11,15 @@ namespace Quiz
         {
             InitializeComponent();
         }
+
+        #region Form Events
+        private void CategoryMaster_Load(object sender, EventArgs e)
+        {
+            Populate();
+        }
+        #endregion
+
+        #region Helper Methods
         private void Populate()
         {
             dgv_CategoryMaster.Rows.Clear();
@@ -30,7 +34,6 @@ namespace Quiz
             dgv_CategoryMaster.Rows.Add();
             PrepareRow(dgv_CategoryMaster.CurrentRow.Index);
         }
-
         private void PrepareRow(int index)
         {
 
@@ -38,13 +41,6 @@ namespace Quiz
             dgv_CategoryMaster.Rows[index].Cells[3].Value = "Delete";
 
         }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            this.Dispose();
-        }
-
-       
         private void DisableEdit(int row, bool Disable)
         {
             if (!Disable && (row == dgv_CategoryMaster.Rows.Count - 1))
@@ -59,21 +55,6 @@ namespace Quiz
         private void DeleteRow(int index)
         {
             dgv_CategoryMaster.Rows.RemoveAt(index);
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            if (validateGridView())
-            {
-                DataLayer.clearData("CategoryMaster");
-                foreach (DataGridViewRow row in dgv_CategoryMaster.Rows)
-                {
-                    DataLayer.InsertCategoryMasterData(row);
-                }
-                Populate();
-                MessageBox.Show("Sucessfully Saved Data", "Success");
-
-            }
         }
         private bool validateGridView()
         {
@@ -90,12 +71,35 @@ namespace Quiz
             return true;
         }
 
-     
+        #endregion
+
+        #region Button Events
+        private void button1_Click(object sender, EventArgs e)
+        {
+            this.Dispose();
+        }
+        private void button2_Click(object sender, EventArgs e)
+        {
+            if (validateGridView())
+            {
+                DataLayer.clearData("CategoryMaster");
+                foreach (DataGridViewRow row in dgv_CategoryMaster.Rows)
+                {
+                    DataLayer.InsertCategoryMasterData(row);
+                }
+                Populate();
+                MessageBox.Show("Sucessfully Saved Data", "Success");
+
+            }
+        }
+
+        #endregion
+
+        #region Data Grid View Events
         private void dgv_CategoryMaster_RowLeave(object sender, DataGridViewCellEventArgs e)
         {
             DisableEdit(e.RowIndex, true);
         }
-
         private void dgv_CategoryMaster_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             switch (e.ColumnIndex)
@@ -104,10 +108,7 @@ namespace Quiz
                 case 3: DeleteRow(dgv_CategoryMaster.CurrentCell.RowIndex); break;
             }
         }
+        #endregion
 
-        private void CategoryMaster_Load(object sender, EventArgs e)
-        {
-            Populate();
-        }
     }
 }

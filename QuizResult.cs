@@ -27,11 +27,30 @@ namespace Quiz
             results = questionsResult;
             QuizInterfaceInstance = obj;
         }
-        
         private void QuizResult_Load(object sender, EventArgs e)
         {
             PopulateForm();
            
+        }
+        private void QuizResult_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                DialogResult result = MessageBox.Show("Do you really want to exit?", "Dialog Title", MessageBoxButtons.YesNo);
+                if (result == DialogResult.Yes)
+                {
+                    Process.GetCurrentProcess().Kill();
+                    Environment.Exit(0);
+                }
+                else
+                {
+                    e.Cancel = true;
+                }
+            }
+            else
+            {
+                e.Cancel = true;
+            }
         }
         #endregion
 
@@ -74,25 +93,6 @@ namespace Quiz
         }
         #endregion
 
-        private void QuizResult_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            if (e.CloseReason == CloseReason.UserClosing)
-            {
-                DialogResult result = MessageBox.Show("Do you really want to exit?", "Dialog Title", MessageBoxButtons.YesNo);
-                if (result == DialogResult.Yes)
-                {
-                    Process.GetCurrentProcess().Kill();
-                    Environment.Exit(0);
-                }
-                else
-                {
-                    e.Cancel = true;
-                }
-            }
-            else
-            {
-                e.Cancel = true;
-            }
-        }
+      
     }
 }

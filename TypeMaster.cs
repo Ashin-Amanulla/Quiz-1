@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Quiz
@@ -17,12 +12,14 @@ namespace Quiz
             InitializeComponent();
         }
 
+        #region Form Events
         private void TypeMaster_Load(object sender, EventArgs e)
         {
             Populate();
-
-
         }
+        #endregion
+
+        #region Helper Methods
         private void Populate()
         {
             dgv_typeMaster.Rows.Clear();
@@ -37,29 +34,13 @@ namespace Quiz
             dgv_typeMaster.Rows.Add();
             PrepareRow(dgv_typeMaster.CurrentRow.Index);
         }
-
         private void PrepareRow(int index)
         {
-            
+
             dgv_typeMaster.Rows[index].Cells[2].Value = "Edit";
             dgv_typeMaster.Rows[index].Cells[3].Value = "Delete";
 
         }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            this.Dispose();
-        }
-
-        private void dgv_typeMaster_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-            switch (e.ColumnIndex)
-            {
-                case 2: DisableEdit(dgv_typeMaster.CurrentCell.RowIndex, false); break;
-                case 3: DeleteRow(dgv_typeMaster.CurrentCell.RowIndex); break;
-            }
-        }
-
         private void DisableEdit(int row, bool Disable)
         {
             if (!Disable && (row == dgv_typeMaster.Rows.Count - 1))
@@ -69,27 +50,13 @@ namespace Quiz
             }
             dgv_typeMaster.Rows[row].Cells[1].ReadOnly = Disable;
             dgv_typeMaster.Rows[row].Cells[1].Style.BackColor = Disable ? Color.White : Color.Tan;
-           
+
         }
         private void DeleteRow(int index)
         {
             dgv_typeMaster.Rows.RemoveAt(index);
         }
 
-        private void button2_Click(object sender, EventArgs e)
-        {
-            if (validateGridView())
-            {
-                DataLayer.clearData("TypeMaster");
-                foreach (DataGridViewRow row in dgv_typeMaster.Rows)
-                {
-                    DataLayer.InsertTypeMasterData(row);
-                }
-                Populate();
-               MessageBox.Show("Sucessfully Saved Data", "Success");
-                
-            }
-        }
         private bool validateGridView()
         {
             foreach (DataGridViewRow row in dgv_typeMaster.Rows)
@@ -104,10 +71,44 @@ namespace Quiz
             }
             return true;
         }
+        #endregion
 
+        #region Button Events
+        private void button1_Click(object sender, EventArgs e)
+        {
+            this.Dispose();
+        }
+        private void button2_Click(object sender, EventArgs e)
+        {
+            if (validateGridView())
+            {
+                DataLayer.clearData("TypeMaster");
+                foreach (DataGridViewRow row in dgv_typeMaster.Rows)
+                {
+                    DataLayer.InsertTypeMasterData(row);
+                }
+                Populate();
+                MessageBox.Show("Sucessfully Saved Data", "Success");
+
+            }
+        }
+
+        #endregion
+
+        #region Data Grid View Events
+        private void dgv_typeMaster_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            switch (e.ColumnIndex)
+            {
+                case 2: DisableEdit(dgv_typeMaster.CurrentCell.RowIndex, false); break;
+                case 3: DeleteRow(dgv_typeMaster.CurrentCell.RowIndex); break;
+            }
+        }
         private void dgv_typeMaster_RowLeave(object sender, DataGridViewCellEventArgs e)
         {
             DisableEdit(e.RowIndex, true);
         }
+        #endregion
+        
     }
 }

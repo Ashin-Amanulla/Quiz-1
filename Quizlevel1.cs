@@ -19,6 +19,10 @@ namespace Quiz
 {
     public partial class Quizlevel1 : Form
     {
+        public Quizlevel1()
+        {
+            InitializeComponent();
+        }
 
         #region Global Variables
         List<QuestionViewDto> questions = new List<QuestionViewDto>();
@@ -27,10 +31,6 @@ namespace Quiz
         #endregion
 
         #region Form Events
-        public Quizlevel1()
-        {
-            InitializeComponent();
-         }
         private void QuizLevel1_Load(object sender, EventArgs e)
         {
             
@@ -42,6 +42,27 @@ namespace Quiz
             ReadquestionsfromJson();
             PrepareForm();
             populateQuestion(1);
+        }
+        private void Quizlevel1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                DialogResult result = MessageBox.Show("Do you really want to exit?", "Dialog Title", MessageBoxButtons.YesNo);
+                if (result == DialogResult.Yes)
+                {
+                    Process.GetCurrentProcess().Kill();
+                    Environment.Exit(0);
+
+                }
+                else
+                {
+                    e.Cancel = true;
+                }
+            }
+            else
+            {
+                e.Cancel = true;
+            }
         }
         #endregion
 
@@ -273,26 +294,5 @@ namespace Quiz
 
         #endregion
 
-        private void Quizlevel1_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            if (e.CloseReason == CloseReason.UserClosing)
-            {
-                DialogResult result = MessageBox.Show("Do you really want to exit?", "Dialog Title", MessageBoxButtons.YesNo);
-                if (result == DialogResult.Yes)
-                {
-                    Process.GetCurrentProcess().Kill();
-                    Environment.Exit(0);
-                    
-                }
-                else
-                {
-                    e.Cancel = true;
-                }
-            }
-            else
-            {
-                e.Cancel = true;
-            }
-        }
     }
 }

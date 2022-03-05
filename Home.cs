@@ -1,12 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Quiz
@@ -18,20 +11,7 @@ namespace Quiz
             InitializeComponent();
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            Quizlevel1 ql = new Quizlevel1();
-            ql.Show();
-            this.Hide();
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            LoginPage lp = new LoginPage();
-            lp.Show();
-            this.Hide();
-        }
-
+        #region Form Events
         private void Home_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (e.CloseReason == CloseReason.UserClosing)
@@ -52,5 +32,24 @@ namespace Quiz
                 e.Cancel = true;
             }
         }
+        #endregion
+
+        #region Button Events
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Quizlevel1 ql = new Quizlevel1();
+            ql.Show();
+            this.Hide();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            LoginPage lp = new LoginPage();
+            lp.Show();
+            this.Hide();
+        }
+        #endregion
+
+       
     }
 }

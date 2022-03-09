@@ -25,6 +25,14 @@ namespace Quiz
 
         /// <summary>
         /// This Method Creates the Necessary Tables in the Database if it doesnt Already Exist.
+        /// that is , if there is no (sql) database present with this program due to lost,misplacement,unavailabilty etc, 
+        /// this function direct the program to create a new sql database  table with following input parameters - 
+        /// 1)Quiz with cells id, question,type, category, image ,choice1,choice 2, choice 3,choice 4, correct answer 
+        /// 2)TypeMaster with type
+        /// 3)CategoryMaster with type
+        /// 4)User with Username and password
+        /// 
+        /// refer the tables design in admin dashboard options
         /// </summary>
         public static void CreateFile()
         {        
@@ -46,10 +54,16 @@ namespace Quiz
             }
         }
         /// <summary>
-        /// This Method Retrives Datafrom the Quiz Table.
+        /// This Method Retrives Datafrom the Quiz Table. 
+        /// That is, after entering the data in sql, we need to fetch them to display and compare(answers) as per our need.
+        /// So this function when called fetched data from our sql dB.
         /// </summary>
         /// <param>
         /// <c>admin</c>Determines if the call is from admin listing or Quiz to randomize result.
+        /// That is, in our program we fetch data mainly for two purpose. One, after successful admin login to enter/edit question, 
+        /// we want to see the already stored question data. Here questions are displayed in an ordered manner.
+        /// Two, after clicking play button , questions are displayed randomly (not in the order in the sql table).
+        /// Here inorder to achieve the randomness, we fetch the questions from the sql by ORDER By RANDOM() function . 
         /// </param>
         /// <returns>
         /// Dataset containing data from the Quiz table.
@@ -60,7 +74,8 @@ namespace Quiz
             mDBcon.Open();
             DataSet dataset = new DataSet();
             cmd = new  SQLiteCommand(mDBcon);
-            cmd.CommandText = admin?"select * from Quiz": "select * from Quiz  ORDER BY RANDOM()";//";
+            cmd.CommandText = admin?"select * from Quiz": "select * from Quiz  ORDER BY RANDOM()";//this terniary operator
+            //controls how to provide data - if it is admin(then in order) or player(then random)";
             datadapter = new SQLiteDataAdapter(cmd);
             datadapter.Fill(dataset, "Quiz");
             mDBcon.Close();
@@ -69,6 +84,8 @@ namespace Quiz
         }
         /// <summary>
         /// This method retrives data from Typemaster table .
+        /// This function fetches "types" inserted by admin (currently true or false, mcq, fill in the blank) and shows in 
+        /// the drop down list in the typebutton in question platform(while add/edit new question)
         /// </summary>
         /// <returns>
         /// Dataset containg typemaster data
@@ -88,6 +105,8 @@ namespace Quiz
         }
         /// <summary>
         /// This method retrives data from CategoryMaster table .
+        ///      /// This function fetches "category" inserted by admin (currently mammals,seabirds,amphibians etc) and shows in 
+        /// the drop down list in the category button in question platform(while add/edit new question)
         /// </summary>
         /// <returns>
         /// Dataset containg CategoryMaster data
@@ -107,6 +126,8 @@ namespace Quiz
         }
         /// <summary>
         /// This method retrives stored image from the database.
+            /// This function fetches images already inserted by admin  and shows in 
+        /// the image column in question platform(while add/edit new question)
         /// </summary>
         /// <param>
         /// <c>Id</c>is the question id of the Image.
@@ -141,6 +162,7 @@ namespace Quiz
         }
         /// <summary>
         /// This method clears datafrom given table.
+        /// DELETE Function
         /// </summary>
         /// <param>
         /// <c>tablename</c> is the name of the table.
@@ -151,7 +173,7 @@ namespace Quiz
             var trans = mDBcon.BeginTransaction();
             cmd.CommandText = "delete from "+tablename;
             cmd.ExecuteNonQuery();
-            cmd.CommandText = "DELETE FROM SQLITE_SEQUENCE WHERE name='" + tablename +"'";
+            cmd.CommandText = "DELETE FROM SQLITE_SEQUENCE WHERE name='" + tablename +"'";//delete/remove
             cmd.ExecuteNonQuery();
             trans.Commit();
             mDBcon.Close();
@@ -159,12 +181,15 @@ namespace Quiz
         }
         /// <summary>
         /// This method inserts data into the Quiz table .
+        /// ADD Function. Add inserted data to the sql dB
         /// </summary>
         /// <param>
         /// <c>row</c> is the row to be inserted.
+        /// Add to next row
         /// </param>
         /// <param>
         /// <c>image</c> is the Image byte to be inserted.
+        /// NEW IMAGE ADD
         /// </param>
         public static void InsertData(DataGridViewRow row , byte[] image)
         {
@@ -174,19 +199,19 @@ namespace Quiz
                 mDBcon.Open();
                 var trans = mDBcon.BeginTransaction();
                 SQLiteCommand cmd = new SQLiteCommand(mDBcon);
-                SQLiteParameter A = new SQLiteParameter("@Question", System.Data.DbType.String);
+                SQLiteParameter A = new SQLiteParameter("@Question", System.Data.DbType.String); //question parameter
                 A.Value = row.Cells[1].Value;
                 cmd.Parameters.Add(A);
-                SQLiteParameter B = new SQLiteParameter("@type", System.Data.DbType.String);
+                SQLiteParameter B = new SQLiteParameter("@type", System.Data.DbType.String); //type parameter(from drop down)
                 B.Value = row.Cells[3].Value;
                 cmd.Parameters.Add(B);
-                SQLiteParameter C = new SQLiteParameter("@category", System.Data.DbType.String);
+                SQLiteParameter C = new SQLiteParameter("@category", System.Data.DbType.String); //category parameter(from drop down)
                 C.Value = row.Cells[2].Value;
                 cmd.Parameters.Add(C);
-                SQLiteParameter D = new SQLiteParameter("@Image", System.Data.DbType.Binary);
+                SQLiteParameter D = new SQLiteParameter("@Image", System.Data.DbType.Binary); //image parameter as binary(not string!!)
                 D.Value = image;
                 cmd.Parameters.Add(D);
-                SQLiteParameter E = new SQLiteParameter("@choice1", System.Data.DbType.String);
+                SQLiteParameter E = new SQLiteParameter("@choice1", System.Data.DbType.String);// choices parameter
                 E.Value = row.Cells[5].Value;
                 cmd.Parameters.Add(E);
                 SQLiteParameter F = new SQLiteParameter("@choice2", System.Data.DbType.String);
@@ -199,11 +224,12 @@ namespace Quiz
                 H.Value = row.Cells[8].Value;
                 cmd.Parameters.Add(H);
 
-                SQLiteParameter I = new SQLiteParameter("@correctchoice", System.Data.DbType.String);
+                SQLiteParameter I = new SQLiteParameter("@correctchoice", System.Data.DbType.String);//adding correct answer
                 I.Value = row.Cells[9].Value;
                 cmd.Parameters.Add(I);
 
-                cmd.CommandText = "INSERT INTO Quiz(Question,type,category,Image,choice1,choice2,choice3,choice4,correctchoice) VALUES(@Question ,@type,@category,@Image,@choice1,@choice2,@choice3,@choice4,@correctchoice)";
+                cmd.CommandText = "INSERT INTO Quiz(Question,type,category,Image,choice1,choice2,choice3,choice4,correctchoice) VALUES(@Question ,@type,@category,@Image,@choice1,@choice2,@choice3,@choice4,@correctchoice)";// storing
+                //every parameter as single entity / single row in sqldB
                 cmd.ExecuteNonQuery();
                 trans.Commit();
 
@@ -218,6 +244,8 @@ namespace Quiz
         }
         /// <summary>
         /// This method validates the user login .
+        /// Admin authorisation:
+        /// This function checks if the login credentials are right or wrong 
         /// </summary>
         /// <param>
         /// <c>username</c> is the username.
@@ -241,6 +269,8 @@ namespace Quiz
         }
         /// <summary>
         /// This method converts the given string to MD5 Hash.
+        ///This functions duty is to encrypt / hash any string inputed.
+        ///We use this here to encrypt out password
         /// </summary>
         /// <param>
         /// <c>input</c>is the sting to be converted.
@@ -267,6 +297,8 @@ namespace Quiz
         }
         /// <summary>
         /// This method inserts data into typeMaster table.
+        ///    This function add new type into the db. 
+
         /// </summary>
         /// <param>
         /// <c>row</c>is the row to be inserted.
@@ -285,7 +317,10 @@ namespace Quiz
             mDBcon.Close();
         }
         /// <summary>
-        /// This method inserts data into typeMaster table.
+        /// This method inserts data into categoryMaster table.
+               ///    This function add new category into the db.  So if you qnt o make q question on reptiles, first create a
+               ///    new category called reptile through this function and then go to question creation platform , select it from dropdown list
+
         /// </summary>
         /// <param>
         /// <c>row</c>is the row to be inserted.

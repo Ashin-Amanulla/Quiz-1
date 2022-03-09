@@ -180,7 +180,7 @@ namespace Quiz
             button.Text = index.ToString();
             button.Tag = index.ToString();
             button.Name = "tabButton" + index.ToString();
-            button.AccessibleName = i.ToString();
+            button.AccessibleName = index.ToString();
             button.Font = new Font("Georgia", 12);
             tabButtonpanel.Controls.Add(button);
             button.Click += new EventHandler(TabButton_Click);

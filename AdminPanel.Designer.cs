@@ -1,5 +1,9 @@
 ﻿namespace Quiz
 {
+
+    /// <summary>
+    /// Class for admin panel. Windows form is used to design admin panel.
+    /// </summary>
     partial class AdminPanel
     {
         /// <summary>

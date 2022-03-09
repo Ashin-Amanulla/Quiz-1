@@ -10,6 +10,7 @@ namespace Quiz
     {
         /// <summary>
         /// The main entry point for the application.
+        /// First point
         /// </summary>
         [STAThread]
         static void Main()
